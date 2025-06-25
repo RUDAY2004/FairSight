@@ -1,63 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FairSight Dashboard</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FairSight</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+    <div class="navbar">
+        <button onclick="window.location.href='signup.html'">Sign Up</button>
+        <button onclick="window.location.href='login.html'">Log In</button>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1 class="header-title">FairSight</h1>
+            <div class="header-desc">
+                <p>FairSight is a unified platform that seamlessly integrates AI solutions to deliver fair, transparent, and ethical outcomes. Our advanced dashboard empowers businesses with explainable AI decisions, robust privacy protections, and comprehensive ethical monitoring. From eliminating bias in HR to ensuring secure data handling in healthcare, FairSight fosters trust and accountability. Transform your AI-driven processes with unparalleled governance and compliance.</p>
+            </div>
+        </div>
+        <div class="services-section">
+            <h2>Our Services</h2>
+            <div class="flashcards" id="flashcards">
+                <div class="nav-button left-button" onclick="moveLeft()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </div>
+                <div class="card" style="transform: translateX(0px);">
+                    <h3>HR</h3>
+                    <p class="title">Fair Resume Screening</p>
+                    <p class="desc">Our platform ensures unbiased candidate evaluations by transparently detailing decision factors like skills, experience, and qualifications. With privacy safeguards and ethical monitoring, FairSight eliminates algorithmic discrimination, fostering trust in HR processes.</p>
+                </div>
+                <div class="card" style="transform: translateX(400px);">
+                    <h3>Banking</h3>
+                    <p class="title">Credit Risk Assessment</p>
+                    <p class="desc">FairSight delivers equitable credit decisions by explaining factors such as income, credit history, and financial behavior. Privacy protection and audit logs ensure ethical data use, enhancing transparency and compliance in banking.</p>
+                </div>
+                <div class="card" style="transform: translateX(800px);">
+                    <h3>Healthcare</h3>
+                    <p class="title">Diagnostic Assistance</p>
+                    <p class="desc">Our solution provides transparent AI-driven diagnostic support, clearly explaining insights while encrypting sensitive patient data. Ethical monitoring ensures compliance, building trust in healthcare decision-making.</p>
+                </div>
+                <div class="card" style="transform: translateX(1200px);">
+                    <h3>Retail</h3>
+                    <p class="title">Recommendation Systems</p>
+                    <p class="desc">FairSight powers fair product recommendations with explainable logic based on user preferences. Privacy-first data handling and ethical oversight ensure customer trust and responsible AI deployment in retail.</p>
+                </div>
+                <div class="card" style="transform: translateX(1600px);">
+                    <h3>Education</h3>
+                    <p class="title">Student Assessment</p>
+                    <p class="desc">Our platform promotes equitable grading by transparently outlining assessment criteria like performance and participation. With privacy protections and audit trails, FairSight ensures ethical and unbiased educational evaluations.</p>
+                </div>
+                <div class="nav-button right-button" onclick="moveRight()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="signup-section">
+            <h2>Experience Responsible AI</h2>
+            <p>Join FairSight to explore our cutting-edge AI solutions and drive ethical innovation across your industry.<a href="signup.html">Sign up now</a></p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 FairSight. All rights reserved.</p>
+    </div>
+    <script>
+        const cards = document.querySelectorAll('.card');
+        let currentPosition = 0;
+        const cardWidth = 400;
+        const totalCards = cards.length;
+        let autoSlideInterval;
 
-    <aside class="sidebar">
-      <h2 class="logo">FairSight</h2>
-      <nav class="nav-links">
-        <a href="#" class="active">Overview</a>
-        <a href="#">Upload Center</a>
-        <a href="#">Governance Scorecard</a>
-        <a href="#">Settings</a>
-      </nav>
-    </aside>
-    <main class="main-content">
-      <div class="top-banner">
-        <h1>Welcome, User</h1>
-        <p>Monitor your AI systems for fairness, transparency, and compliance.</p>
-      </div>
+        // Initialize positions and start auto-slide
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                currentPosition -= 1;
+                updateCardPositions();
+                // Reposition the first card to the end when it moves out of view
+                if (currentPosition <= -cardWidth) {
+                    currentPosition = (totalCards - 1) * cardWidth;
+                }
+            }, 1); 
+        }
 
-      <h2 class="section-title">Industry Solutions</h2>
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-icon">🔍</div>
-          <h3>HR</h3>
-          <p>Fair Resume Screening</p>
-          <button>Audit This Domain</button>
-        </div>
-        <div class="card">
-          <div class="card-icon">📑</div>
-          <h3>Banking</h3>
-          <p>Credit Risk Assessment</p>
-          <button>Audit This Domain</button>
-        </div>
-        <div class="card">
-          <div class="card-icon">🩺</div>
-          <h3>Healthcare</h3>
-          <p>Diagnostic Assistance</p>
-          <button>Audit This Domain</button>
-        </div>
-        <div class="card">
-          <div class="card-icon">🛒</div>
-          <h3>Retail</h3>
-          <p>Recommendation Systems</p>
-          <button>Audit This Domain</button>
-        </div>
-        <div class="card">
-          <div class="card-icon">🎓</div>
-          <h3>Education</h3>
-          <p>Student Assessment</p>
-          <button>Audit This Domain</button>
-        </div>
-      </div>
-    </main>
-  </div>
+        function moveRight() {
+            clearInterval(autoSlideInterval);
+            currentPosition -= cardWidth;
+            updateCardPositions();
+            if (currentPosition <= -cardWidth) {
+                currentPosition = (totalCards - 1) * cardWidth;
+            }
+            startAutoSlide();
+        }
+
+        function moveLeft() {
+            clearInterval(autoSlideInterval);
+            currentPosition += cardWidth;
+            updateCardPositions();
+            if (currentPosition >= (totalCards - 1) * cardWidth) {
+                currentPosition = 0;
+            }
+            startAutoSlide();
+        }
+
+        function updateCardPositions() {
+            cards.forEach((card, index) => {
+                let pos = currentPosition + (index * cardWidth);
+
+                if (pos < -cardWidth) {
+                    pos = (totalCards * cardWidth) + pos;
+                }
+                card.style.transform = `translateX(${pos}px)`;
+            });
+        }
+        startAutoSlide();
+    </script>
 </body>
 </html>

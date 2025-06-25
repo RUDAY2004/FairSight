@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FairSight - Sign Up</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        .navbar {
+            background-color: #111827;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar button {
+            padding: 12px 24px;
+            margin-left: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #2563eb;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+        }
+        .navbar button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .header {
+            position: relative;
+            background: linear-gradient(180deg, #e6f0fa, #f0f4f8);
+            padding: 100px 0 60px;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23111327" fill-opacity="0.05" d="M0,100L48,90C96,80,192,60,288,60C384,60,480,80,576,80C672,80,768,60,864,50C960,40,1056,40,1152,50C1240,60,1344,80,1392,90L1440,100L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat center bottom;
+            background-size: cover;
+            z-index: 1;
+        }
+        .header-title {
+            font-size: 72px;
+            margin-bottom: 40px;
+            font-weight: 800;
+            color: #2563eb;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-in;
+        }
+        .header-desc {
+            background-color: #fff;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e6f0;
+            position: relative;
+            z-index: 2;
+        }
+        .header-desc p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #4b5563;
+            margin: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .required-info {
+            background-color: #fff;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e6f0;
+            text-align: left;
+        }
+        .required-info h3 {
+            font-size: 24px;
+            color: #111827;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .required-info ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+        .required-info li {
+            font-size: 16px;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .signup-section {
+            padding: 80px 0;
+            background-color: #111827;
+            color: #fff;
+            margin-top: 60px;
+            border-radius: 20px 20px 0 0;
+        }
+        .signup-section h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .signup-section p {
+            font-size: 19px;
+            color: #d1d5db;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .signup-section a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .signup-form {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e6f0;
+        }
+        .signup-form h2 {
+            font-size: 32px;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            color: #4b5563;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .form-group select {
+            appearance: none; /* Remove default browser appearance */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%234b5563" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+        .form-group select:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+        .form-group .note {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        .signup-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #2563eb;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .signup-form button:hover {
+            background-color: #1d4ed8;
+        }
+        .signup-form p {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+        }
+        .signup-form a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 20px 0;
+            font-size: 14px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .header {
+                padding: 60px 0 40px;
+            }
+            .header-title {
+                font-size: 48px;
+                margin-bottom: 30px;
+            }
+            .header-desc {
+                padding: 20px;
+                max-width: 90%;
+            }
+            .header-desc p {
+                font-size: 16px;
+            }
+            .required-info {
+                padding: 20px;
+                max-width: 90%;
+            }
+            .required-info h3 {
+                font-size: 22px;
+            }
+            .required-info li {
+                font-size: 14px;
+            }
+            .signup-section h2 {
+                font-size: 30px;
+            }
+            .signup-form {
+                padding: 20px;
+                margin: 30px auto;
+            }
+            .signup-form h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="header-title">Join FairSight</h1>
+            <div class="header-desc">
+                <p>Create your account to unlock powerful tools and insights for your business.</p>
+            </div>
+        </div>
+        <div class="signup-form">
+            <h2>Sign Up</h2>
+            <form id="signupForm" onsubmit="return validateForm(event)">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required placeholder="10-digit number">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" name="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="domains">Select Domains</label>
+                    <select id="domains" name="domains" required>
+                        <option value="" disabled selected>Select a Domain</option>
+                        <option value="HR">HR</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Education">Education</option>
+                    </select>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+            <p>Already have an account? <a href="login.html">Log In</a>.</p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 FairSight. All rights reserved.</p>
+    </div>
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            alert("Signup successful! Redirecting to login...");
+            window.location.href = 'login.html';
+            return true;
+        }
+    </script>
+</body>
+</html>
