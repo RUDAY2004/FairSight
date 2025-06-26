@@ -146,11 +146,20 @@ def explain_forest(trees, headers):
     feature_counts = Counter()
     for tree in trees:
         feature_importance(tree, feature_counts)
+
     total = sum(feature_counts.values())
-    explanation = {
-        headers[i]: f"{(feature_counts[i] / total * 100):.1f}%" if total else "0.0%"
-        for i in range(len(headers) - 1)
-    }
+    explanation = {}
+
+    used_features = set()
+    for idx in range(len(headers) - 1):
+        feature_name = headers[idx]
+        if feature_name in used_features:
+            continue  # skip duplicate names
+        used_features.add(feature_name)
+
+        perc = (feature_counts[idx] / total * 100) if total else 0
+        explanation[feature_name] = f"{perc:.1f}%"
+
     return explanation
 
 # ------------------ ID/Name Lookup ------------------
