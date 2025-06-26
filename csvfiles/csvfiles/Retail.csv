@@ -1,0 +1,101 @@
+CustomerID,Name,Age,Gender,Location,DaysSinceLastPurchase,MonthlyPurchaseFrequency,AverageSpendPerPurchase,TopCategoryPurchased,TotalSpentThisMonth,RecommendedAction
+CUST1000,Neha Mehta,37,Female,Kolkata,19,15,932,Fashion,13980,Bundle Offers
+CUST1001,Manish Pandey,46,Other,Kolkata,6,13,6458,Home Decor,83954,Discounts
+CUST1002,Suresh Patel,22,Male,Delhi,57,11,7842,Fashion,86262,Discounts
+CUST1003,Neha Mishra,58,Other,Hyderabad,86,1,7014,Groceries,7014,Discounts
+CUST1004,Karan Kumar,26,Female,Bengaluru,18,2,1610,Electronics,3220,Bundle Offers
+CUST1005,Karan Mishra,40,Male,Chennai,75,2,6179,Books,12358,Loyalty Points
+CUST1006,Tarun Das,42,Other,Kolkata,37,14,1265,Toys,17710,Cashback
+CUST1007,Sonal Thakur,44,Male,Delhi,38,6,6523,Home Decor,39138,Loyalty Points
+CUST1008,Pooja Das,62,Male,Kolkata,25,14,7435,Books,104090,New Arrivals
+CUST1009,Pooja Sharma,65,Other,Mumbai,48,10,5761,Electronics,57610,New Arrivals
+CUST1010,Pooja Nair,49,Male,Delhi,77,13,6123,Home Decor,79599,Discounts
+CUST1011,Anjali Bhatia,20,Female,Hyderabad,7,1,6784,Home Decor,6784,Cashback
+CUST1012,Karan Nair,20,Male,Hyderabad,66,11,5369,Home Decor,59059,Loyalty Points
+CUST1013,Nikhil Joshi,61,Female,Hyderabad,72,5,2003,Groceries,10015,Cashback
+CUST1014,Karan Nair,32,Female,Chennai,19,2,9079,Home Decor,18158,Bundle Offers
+CUST1015,Riya Chopra,63,Male,Kolkata,35,1,838,Home Decor,838,New Arrivals
+CUST1016,Neha Joshi,27,Other,Kolkata,64,14,3478,Groceries,48692,Loyalty Points
+CUST1017,Suresh Joshi,29,Other,Hyderabad,65,4,1193,Groceries,4772,Loyalty Points
+CUST1018,Pooja Ghosh,59,Male,Hyderabad,16,4,3031,Fashion,12124,Cashback
+CUST1019,Rohit Chopra,27,Other,Bengaluru,77,12,738,Home Decor,8856,Loyalty Points
+CUST1020,Nikhil Nair,52,Female,Kolkata,10,14,8248,Electronics,115472,New Arrivals
+CUST1021,Deepak Thakur,54,Other,Mumbai,9,6,2919,Home Decor,17514,New Arrivals
+CUST1022,Riya Sharma,38,Female,Delhi,88,5,2297,Groceries,11485,New Arrivals
+CUST1023,Anita Gupta,48,Male,Mumbai,40,11,7464,Groceries,82104,Bundle Offers
+CUST1024,Anjali Jain,19,Other,Bengaluru,46,11,7075,Home Decor,77825,Discounts
+CUST1025,Anita Mehta,20,Male,Kolkata,39,1,3756,Groceries,3756,Bundle Offers
+CUST1026,Divya Bhatia,48,Male,Bengaluru,14,15,5240,Books,78600,Cashback
+CUST1027,Anita Pandey,53,Female,Hyderabad,60,15,6161,Fashion,92415,Loyalty Points
+CUST1028,Riya Kapoor,64,Other,Hyderabad,39,9,6943,Toys,62487,Discounts
+CUST1029,Tarun Nair,41,Female,Mumbai,59,7,5014,Home Decor,35098,Discounts
+CUST1030,Divya Singh,32,Male,Mumbai,84,2,700,Books,1400,Loyalty Points
+CUST1031,Anita Sharma,36,Other,Kolkata,46,12,4863,Toys,58356,Loyalty Points
+CUST1032,Suresh Jain,35,Other,Chennai,39,13,9855,Fashion,128115,Bundle Offers
+CUST1033,Raj Singh,29,Other,Mumbai,14,8,911,Home Decor,7288,New Arrivals
+CUST1034,Raj Nair,33,Male,Chennai,32,13,8076,Toys,104988,Cashback
+CUST1035,Pooja Kapoor,46,Female,Bengaluru,57,13,6942,Toys,90246,New Arrivals
+CUST1036,Divya Das,60,Male,Hyderabad,75,4,8882,Electronics,35528,New Arrivals
+CUST1037,Suresh Ghosh,62,Other,Bengaluru,13,2,784,Toys,1568,New Arrivals
+CUST1038,Anita Joshi,60,Male,Chennai,52,14,7424,Toys,103936,Bundle Offers
+CUST1039,Deepak Joshi,20,Female,Bengaluru,52,15,9050,Books,135750,New Arrivals
+CUST1040,Divya Yadav,63,Male,Delhi,78,9,637,Books,5733,Discounts
+CUST1041,Tarun Nair,42,Male,Hyderabad,88,2,4034,Books,8068,New Arrivals
+CUST1042,Nikhil Singh,21,Other,Delhi,7,5,4232,Books,21160,Discounts
+CUST1043,Amit Thakur,45,Male,Delhi,67,6,1327,Fashion,7962,Bundle Offers
+CUST1044,Meena Singh,26,Other,Chennai,73,13,1246,Fashion,16198,Bundle Offers
+CUST1045,Nikhil Pandey,27,Other,Bengaluru,27,6,2678,Groceries,16068,Discounts
+CUST1046,Rohit Mishra,58,Other,Chennai,73,5,8206,Books,41030,Loyalty Points
+CUST1047,Vikram Jain,18,Male,Bengaluru,8,13,3263,Groceries,42419,Loyalty Points
+CUST1048,Vikram Verma,59,Female,Bengaluru,25,9,8512,Home Decor,76608,New Arrivals
+CUST1049,Anjali Mehta,50,Other,Delhi,62,9,3666,Home Decor,32994,Loyalty Points
+CUST1050,Anjali Pandey,61,Male,Chennai,90,3,8817,Electronics,26451,New Arrivals
+CUST1051,Sonal Joshi,18,Other,Delhi,3,12,7897,Groceries,94764,Cashback
+CUST1052,Anita Mehta,64,Male,Kolkata,65,6,7489,Home Decor,44934,Discounts
+CUST1053,Amit Chopra,19,Female,Kolkata,32,14,5743,Electronics,80402,Cashback
+CUST1054,Nikhil Verma,53,Female,Mumbai,89,9,4793,Fashion,43137,New Arrivals
+CUST1055,Shruti Bhatia,35,Male,Hyderabad,4,9,8828,Fashion,79452,Loyalty Points
+CUST1056,Priya Chopra,23,Other,Kolkata,1,8,5908,Fashion,47264,Cashback
+CUST1057,Karan Reddy,32,Male,Bengaluru,22,13,3738,Home Decor,48594,Loyalty Points
+CUST1058,Nikhil Patel,48,Female,Bengaluru,21,1,8227,Books,8227,New Arrivals
+CUST1059,Neha Das,29,Other,Chennai,87,8,8690,Home Decor,69520,Cashback
+CUST1060,Sonal Das,18,Female,Mumbai,27,8,1726,Electronics,13808,Discounts
+CUST1061,Amit Yadav,39,Male,Mumbai,18,6,7459,Electronics,44754,Cashback
+CUST1062,Karan Yadav,46,Female,Delhi,77,12,2502,Fashion,30024,Cashback
+CUST1063,Amit Singh,25,Male,Delhi,17,1,7019,Fashion,7019,Loyalty Points
+CUST1064,Nikhil Kapoor,49,Female,Hyderabad,48,6,6658,Toys,39948,Discounts
+CUST1065,Rohit Kapoor,37,Male,Mumbai,48,11,6537,Electronics,71907,Cashback
+CUST1066,Riya Gupta,38,Other,Bengaluru,28,3,1945,Toys,5835,Loyalty Points
+CUST1067,Neha Verma,43,Female,Hyderabad,21,9,6878,Home Decor,61902,Bundle Offers
+CUST1068,Vikram Gupta,58,Female,Chennai,45,8,9675,Electronics,77400,Discounts
+CUST1069,Suresh Kapoor,47,Male,Bengaluru,72,12,8615,Fashion,103380,Discounts
+CUST1070,Suresh Mishra,58,Other,Chennai,63,14,660,Books,9240,Cashback
+CUST1071,Karan Chopra,65,Female,Mumbai,72,12,8736,Fashion,104832,Cashback
+CUST1072,Suresh Yadav,55,Male,Kolkata,39,3,8938,Toys,26814,New Arrivals
+CUST1073,Manish Gupta,25,Female,Kolkata,67,7,1335,Books,9345,Cashback
+CUST1074,Suresh Mehta,60,Other,Hyderabad,53,9,9975,Fashion,89775,New Arrivals
+CUST1075,Rohit Gupta,22,Female,Bengaluru,52,7,5277,Toys,36939,Discounts
+CUST1076,Manish Yadav,64,Male,Mumbai,67,6,9395,Home Decor,56370,Loyalty Points
+CUST1077,Amit Mishra,57,Other,Kolkata,70,13,6130,Groceries,79690,Bundle Offers
+CUST1078,Tarun Das,28,Female,Delhi,3,9,4981,Home Decor,44829,Bundle Offers
+CUST1079,Riya Singh,22,Other,Hyderabad,18,5,6835,Electronics,34175,Bundle Offers
+CUST1080,Priya Ghosh,46,Female,Delhi,56,14,2948,Books,41272,Loyalty Points
+CUST1081,Suresh Yadav,38,Female,Mumbai,45,3,579,Electronics,1737,Bundle Offers
+CUST1082,Deepak Mehta,29,Male,Hyderabad,52,7,8298,Books,58086,Loyalty Points
+CUST1083,Anjali Kumar,61,Male,Kolkata,66,5,7825,Groceries,39125,Discounts
+CUST1084,Divya Bhatia,50,Female,Hyderabad,77,13,8832,Fashion,114816,Bundle Offers
+CUST1085,Suresh Pandey,35,Female,Hyderabad,86,1,2484,Toys,2484,Discounts
+CUST1086,Rohit Joshi,29,Female,Bengaluru,28,15,1604,Electronics,24060,Loyalty Points
+CUST1087,Vikram Singh,41,Male,Hyderabad,72,12,9303,Electronics,111636,Bundle Offers
+CUST1088,Riya Kapoor,55,Male,Hyderabad,4,10,9678,Toys,96780,Discounts
+CUST1089,Anjali Mehta,47,Female,Mumbai,25,13,2055,Fashion,26715,Loyalty Points
+CUST1090,Karan Kumar,42,Male,Delhi,6,15,4342,Toys,65130,Loyalty Points
+CUST1091,Suresh Jain,18,Male,Mumbai,23,1,7001,Fashion,7001,Cashback
+CUST1092,Amit Pandey,38,Male,Bengaluru,21,13,2602,Electronics,33826,Bundle Offers
+CUST1093,Raj Patel,54,Female,Delhi,23,6,6510,Fashion,39060,Bundle Offers
+CUST1094,Manish Mishra,58,Other,Chennai,43,15,5692,Home Decor,85380,Bundle Offers
+CUST1095,Manish Sharma,24,Male,Bengaluru,63,15,9443,Groceries,141645,Cashback
+CUST1096,Karan Singh,55,Female,Mumbai,90,6,2475,Fashion,14850,Cashback
+CUST1097,Divya Chopra,18,Male,Delhi,16,2,9022,Electronics,18044,Bundle Offers
+CUST1098,Manish Mishra,46,Female,Mumbai,85,7,5226,Electronics,36582,Bundle Offers
+CUST1099,Shruti Nair,23,Female,Hyderabad,13,6,6690,Fashion,40140,Bundle Offers
