@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FairSight - Healthcare Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .header {
+            background: linear-gradient(180deg, #e6f0fa, #f0f4f8);
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease-in;
+        }
+        .header h1 {
+            font-size: 36px;
+            color: #2563eb;
+            margin: 0;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 16px;
+            color: #4b5563;
+            max-width: 800px;
+            margin: 10px auto;
+        }
+        .demo-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out;
+        }
+        .demo-section h2 {
+            font-size: 24px;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        .demo-section p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        .demo-section .result {
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .upload-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+            animation: fadeInExpand 0.8s ease-in-out;
+        }
+        .upload-section h2 {
+            font-size: 24px;
+            color: #111827;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .upload-section .upload-input {
+            max-width: 400px;
+            margin: 0 auto 20px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .upload-section .upload-input:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .upload-section input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 2px dashed #e0e6f0;
+            border-radius: 6px;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            display: block;
+        }
+        .upload-section input[type="file"]:hover {
+            border-color: #2563eb;
+            background-color: #e6f0fa;
+        }
+        .upload-section button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #2563eb;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-section button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .upload-section button::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: width 0.3s ease;
+        }
+        .upload-section button:hover::after {
+            width: 100%;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .results.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .results h3 {
+            font-size: 18px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        .results p {
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .footer {
+            background-color: #1f2937;
+            color: #d1d5db;
+            padding: 20px 0;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInExpand {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+            .header p {
+                font-size: 14px;
+            }
+            .demo-section h2, .upload-section h2 {
+                font-size: 20px;
+            }
+            .upload-section .upload-input {
+                max-width: 100%;
+            }
+            .results {
+                max-width: 90%;
+            }
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Healthcare Model</h1>
+            <p>Our Healthcare Model provides transparent AI-driven diagnostic assistance, analyzing patient data with encrypted insights and ethical monitoring for compliance and trust.</p>
+        </div>
+        <div class="demo-section">
+            <h2>Demo Prediction</h2>
+            <p>Example Input: A 40-year-old male patient with 120/80 blood pressure, 5.5 HbA1c, and 70% oxygen saturation.</p>
+            <p class="result">Result: Diagnosis: Healthy (Confidence: 91.40%)</p>
+        </div>
+        <div class="upload-section">
+            <h2>Upload Your CSV</h2>
+            <div class="upload-input">
+                <input type="file" id="csvFile" accept=".csv">
+            </div>
+            <button onclick="processCSV()">Submit</button>
+            <div class="results" id="results">
+                <h3>Prediction Results</h3>
+                <p id="resultText">Upload a CSV file to see predictions here.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 FairSight. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Auth State Check
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                alert("You must be logged in to access this page.");
+                window.location.href = "login.html";
+            }
+        });
+
+        // Logout Function
+        function logout() {
+            firebase.auth().signOut().then(() => window.location.href = "login.html");
+        }
+
+        // CSV Processing Function
+        function processCSV() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a CSV file.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const headers = lines[0].split(',');
+                const data = lines.slice(1).filter(line => line.trim()).map(line => line.split(','));
+
+                let results = [];
+                const colStats = [
+                    (18, 80), (80, 200), (4, 10), (50, 100) // Placeholder min/max for age, blood pressure, HbA1c, oxygen saturation
+                ];
+                const weights = [0.25, 0.25, 0.3, 0.2];
+                const bias = -0.15;
+
+                data.forEach(row => {
+                    if (row.length === headers.length) {
+                        const [pred, prob] = predictSingleInput(row, weights, bias, colStats);
+                        results.push(`Patient ${row[1]}: ${pred === 1 ? 'Healthy' : 'Requires Attention'} (Confidence: ${(prob * 100).toFixed(2)}%)`);
+                    }
+                });
+
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.classList.add('active');
+                if (results.length > 0) {
+                    resultsDiv.innerHTML = `<h3>Prediction Results</h3><p>${results.join('<br>')}</p>`;
+                } else {
+                    resultsDiv.innerHTML = `<h3>Prediction Results</h3><p>No valid data to predict.</p>`;
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Mock predictSingleInput function for Healthcare
+        function predictSingleInput(newRow, weights, bias, colStats) {
+            let features = [];
+
+            const age = parseFloat(newRow[2]) || 0;
+            const [ageMin, ageMax] = colStats[0];
+            features.push((age - ageMin) / (ageMax - ageMin + 1e-8));
+
+            const bp = parseFloat(newRow[5]) || 0;
+            const [bpMin, bpMax] = colStats[1];
+            features.push((bp - bpMin) / (bpMax - bpMin + 1e-8));
+
+            const hba1c = parseFloat(newRow[6]) || 0;
+            const [hba1cMin, hba1cMax] = colStats[2];
+            features.push((hba1c - hba1cMin) / (hba1cMax - hba1cMin + 1e-8));
+
+            const oxygen = parseFloat(newRow[7]) || 0;
+            const [oxygenMin, oxygenMax] = colStats[3];
+            features.push((oxygen - oxygenMin) / (oxygenMax - oxygenMin + 1e-8));
+
+            let z = bias;
+            for (let i = 0; i < weights.length; i++) {
+                z += weights[i] * features[i];
+            }
+            const prob = 1 / (1 + Math.exp(-z));
+            const pred = prob >= 0.5 ? 1 : 0;
+
+            return [pred, prob];
+        }
+    </script>
+</body>
+</html>

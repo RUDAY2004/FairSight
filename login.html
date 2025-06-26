@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FairSight - Log In</title>
+    
     <style>
-        body {
+      body {
             margin: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #f9fafb;
@@ -184,6 +185,11 @@
             }
         }
     </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -195,7 +201,7 @@
         </div>
         <div class="login-form">
             <h2>Log In</h2>
-            <form id="loginForm" onsubmit="return validateForm(event)">
+            <form id="loginForm" onsubmit="login(event)">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
@@ -212,23 +218,7 @@
     <div class="footer">
         <p>© 2025 FairSight. All rights reserved.</p>
     </div>
-    <script>
-        function validateForm(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if (!email || !password) {
-                alert("Please fill in all fields!");
-                return false;
-            }
-            if (!email.includes('@') || !email.includes('.')) {
-                alert("Please enter a valid email address!");
-                return false;
-            }
-            alert("Login successful! Redirecting...");
-            window.location.href = 'dashboard.html'; // Redirect to a hypothetical dashboard
-            return true;
-        }
-    </script>
+   <script src="firebase.js"></script>
+
 </body>
 </html>

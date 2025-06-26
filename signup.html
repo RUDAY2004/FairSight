@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FairSight - Sign Up</title>
     <style>
-        body {
+       body {
             margin: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #f9fafb;
@@ -176,7 +176,7 @@
             transition: border-color 0.3s;
         }
         .form-group select {
-            appearance: none; /* Remove default browser appearance */
+            appearance: none; 
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%234b5563" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
             background-size: 12px;
             cursor: pointer;
@@ -257,6 +257,10 @@
             }
         }
     </style>
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="container">
@@ -268,7 +272,7 @@
         </div>
         <div class="signup-form">
             <h2>Sign Up</h2>
-            <form id="signupForm" onsubmit="return validateForm(event)">
+            <form id="signupForm" onsubmit="signup(event)">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -312,19 +316,7 @@
     <div class="footer">
         <p>© 2025 FairSight. All rights reserved.</p>
     </div>
-    <script>
-        function validateForm(event) {
-            event.preventDefault();
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                return false;
-            }
-            alert("Signup successful! Redirecting to login...");
-            window.location.href = 'login.html';
-            return true;
-        }
-    </script>
+    <!-- Custom Firebase logic -->
+   <script src="firebase.js"></script>
 </body>
 </html>
