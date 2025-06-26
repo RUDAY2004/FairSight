@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-     <div class="navbar">
+    <div class="navbar">
         <img src="logo.png" alt="FairSight Logo" class="logo">
         <div>
             <button onclick="window.location.href='signup.html'">Sign Up</button>
@@ -74,51 +74,32 @@
         let currentPosition = 0;
         const cardWidth = 400;
         const totalCards = cards.length;
-        let autoSlideInterval;
-
-        // Initialize positions and start auto-slide
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                currentPosition -= 1;
-                updateCardPositions();
-                // Reposition the first card to the end when it moves out of view
-                if (currentPosition <= -cardWidth) {
-                    currentPosition = (totalCards - 1) * cardWidth;
-                }
-            }, 10); 
-        }
 
         function moveRight() {
-            clearInterval(autoSlideInterval);
             currentPosition -= cardWidth;
-            updateCardPositions();
-            if (currentPosition <= -cardWidth) {
-                currentPosition = (totalCards - 1) * cardWidth;
+            if (currentPosition < -((totalCards - 1) * cardWidth)) {
+                currentPosition = 0; // Loop back to the first card
             }
-            startAutoSlide();
+            updateCardPositions();
         }
 
         function moveLeft() {
-            clearInterval(autoSlideInterval);
             currentPosition += cardWidth;
-            updateCardPositions();
-            if (currentPosition >= (totalCards - 1) * cardWidth) {
-                currentPosition = 0;
+            if (currentPosition > 0) {
+                currentPosition = -((totalCards - 1) * cardWidth); // Loop back to the last card
             }
-            startAutoSlide();
+            updateCardPositions();
         }
 
         function updateCardPositions() {
             cards.forEach((card, index) => {
-                let pos = currentPosition + (index * cardWidth);
-
-                if (pos < -cardWidth) {
-                    pos = (totalCards * cardWidth) + pos;
-                }
+                const pos = currentPosition + (index * cardWidth);
                 card.style.transform = `translateX(${pos}px)`;
             });
         }
-        startAutoSlide();
+
+        // Initial setup to ensure proper positioning
+        updateCardPositions();
     </script>
 </body>
 </html>
