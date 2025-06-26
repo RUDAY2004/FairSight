@@ -86,7 +86,7 @@
         function moveLeft() {
             currentPosition += cardWidth;
             if (currentPosition > 0) {
-                currentPosition = -((totalCards - 1) * cardWidth); // Loop back to the last card
+                currentPosition = -((totalCards - 1) * cardWidth); 
             }
             updateCardPositions();
         }
@@ -97,8 +97,6 @@
                 card.style.transform = `translateX(${pos}px)`;
             });
         }
-
-        // Initial setup to ensure proper positioning
         updateCardPositions();
     </script>
 </body>
