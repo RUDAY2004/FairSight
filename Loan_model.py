@@ -1,7 +1,7 @@
 import math
 import random
 import csv
-
+import json
 # ------------------- Sigmoid -------------------
 def sigmoid(z):
     return 1.0 if z > 100 else 0.0 if z < -100 else 1 / (1 + math.exp(-z))
@@ -114,6 +114,41 @@ def predict_new(entry, weights, bias, stats, emp_map, purpose_map, marital_map, 
     prob = sigmoid(z)
     return 1 if prob >= 0.5 else 0, prob
 
+# ----------------------- Explaination ----------------------------------------------
+def predict_with_explanation(entry, weights, bias, stats, emp_map, purpose_map, marital_map, loc_map):
+    raw_features = [
+        float(entry[3]), float(entry[4]), float(entry[5]), emp_map.get(entry[6], 0),
+        float(entry[7]), float(entry[8]), float(entry[9]), int(entry[10]),
+        1 if entry[11].lower() == "yes" else 0,
+        purpose_map.get(entry[12], 0), marital_map.get(entry[13], 0), loc_map.get(entry[14], 0)
+    ]
+    norm_features = [
+        (val - stats[i][0]) / (stats[i][1] - stats[i][0] + 1e-8)
+        for i, val in enumerate(raw_features)
+    ]
+
+    z = sum(w * x for w, x in zip(weights, norm_features)) + bias
+    prob = sigmoid(z)
+    pred = 1 if prob >= 0.5 else 0
+
+    # Feature Contribution
+    contrib = {name: abs(w * x) for name, w, x in zip([
+        "Age", "Credit Score", "Income", "Employment Type", "Loan Amount", "Tenure",
+        "Existing Debt", "Dependents", "Collateral", "Purpose", "Marital Status", "Location"
+    ], weights, norm_features)}
+
+    total = sum(contrib.values()) + 1e-8
+    explanation = {k: f"{(v / total) * 100:.1f}%" for k, v in contrib.items()}
+
+    result = {
+        "Applicant Name": entry[2],
+        "Loan ID": entry[0],
+        "Prediction": "Approved" if pred else "Rejected",
+        "Confidence": f"{prob * 100:.2f}%",
+        "Explanation": explanation
+    }
+    return result
+
 # ------------------- Main -------------------
 if __name__ == "__main__":
     headers, data = read_csv(r"C:\Users\madir\OneDrive\Desktop\SAPHACK\csvfiles\csvfiles\Loandata.csv")  # Update path
@@ -136,7 +171,19 @@ if __name__ == "__main__":
     print(f"Test Accuracy:  {test_acc:.2f}%")
 
     # Example new input (row format)
-    new_user = ["LN1100", "ABCXY1234Z", "Amit Rawat", "35", "720", "50000", "Salaried", "200000", "36", "10000", "2", "Yes", "Medical", "Married", "Urban", ""]
-    pred, prob = predict_new(new_user, weights, bias, stats, emp_map, purpose_map, marital_map, loc_map)
-    print("\nPrediction for new loan application:")
-    print(f"  Loan Status: {'Approved' if pred else 'Rejected'} (Confidence: {prob*100:.2f}%)")
+    #new_user = ["LN1100", "ABCXY1234Z", "Amit Rawat", "35", "720", "50000", "Salaried", "200000", "36", "10000", "2", "Yes", "Medical", "Married", "Urban", ""]
+    #pred, prob = predict_new(new_user, weights, bias, stats, emp_map, purpose_map, marital_map, loc_map)
+    #print("\nPrediction for new loan application:")
+    #print(f"  Loan Status: {'Approved' if pred else 'Rejected'} (Confidence: {prob*100:.2f}%)")
+
+    user_input = input("\nEnter Loan ID: ").strip().upper()
+    matched = [row for row in data if row[0].strip().upper() == user_input]
+
+    if not matched:
+        print("Loan ID not found.")
+    else:
+        result = predict_with_explanation(
+            matched[0], weights, bias, stats, emp_map, purpose_map, marital_map, loc_map
+        )
+        print("\nFinal JSON Output:")
+        print(json.dumps(result, indent=2))
