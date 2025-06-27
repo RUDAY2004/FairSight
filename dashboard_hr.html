@@ -1,315 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FairSight - HR Dashboard</title>
-    <style>
-          body {
-            margin: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f9fafb;
-            color: #1f2937;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 50px 20px;
-            text-align: center;
-        }
-        .header {
-            background: linear-gradient(180deg, #e6f0fa, #f0f4f8);
-            padding: 40px 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            animation: fadeIn 0.8s ease-in;
-        }
-        .header h1 {
-            font-size: 36px;
-            color: #2563eb;
-            margin: 0;
-            font-weight: 700;
-        }
-        .header p {
-            font-size: 16px;
-            color: #4b5563;
-            max-width: 800px;
-            margin: 10px auto;
-        }
-        .demo-section {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            animation: slideUp 0.6s ease-out;
-        }
-        .demo-section h2 {
-            font-size: 24px;
-            color: #111827;
-            margin-bottom: 15px;
-        }
-        .demo-section p {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 10px;
-        }
-        .demo-section .result {
-            font-weight: bold;
-            color: #2563eb;
-        }
-        .upload-section {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-            animation: fadeInExpand 0.8s ease-in-out;
-        }
-        .upload-section h2 {
-            font-size: 24px;
-            color: #111827;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        .upload-section .upload-input {
-            max-width: 400px;
-            margin: 0 auto 20px;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .upload-section .upload-input:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .upload-section input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 14px;
-            border: 2px dashed #e0e6f0;
-            border-radius: 6px;
-            background-color: #f9fafb;
-            cursor: pointer;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-            display: block;
-        }
-        .upload-section input[type="file"]:hover {
-            border-color: #2563eb;
-            background-color: #e6f0fa;
-        }
-        .upload-section button {
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            background-color: #2563eb;
-            color: #fff;
-            cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-        .upload-section button:hover {
-            background-color: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-        .upload-section button::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background: rgba(255, 255, 255, 0.2);
-            transition: width 0.3s ease;
-        }
-        .upload-section button:hover::after {
-            width: 100%;
-        }
-        .results {
-            margin-top: 20px;
-            text-align: left;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .results.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .results h3 {
-            font-size: 18px;
-            color: #111827;
-            margin-bottom: 10px;
-        }
-        .results p {
-            font-size: 14px;
-            color: #4b5563;
-        }
-        .footer {
-            background-color: #1f2937;
-            color: #d1d5db;
-            padding: 20px 0;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeInExpand {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 28px;
-            }
-            .header p {
-                font-size: 14px;
-            }
-            .demo-section h2, .upload-section h2 {
-                font-size: 20px;
-            }
-            .upload-section .upload-input {
-                max-width: 100%;
-            }
-            .results {
-                max-width: 90%;
-            }
-        }
-    </style>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script src="firebase.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FairSight - HR Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 25px;
+      text-align: center;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #e6f0fa, #f0f4f8);
+      padding: 50px 30px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.8s ease-in;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
+      user-select: none;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      color: #2563eb;
+      margin: 0 0 15px 0;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-shadow: 0 1px 2px rgba(37, 99, 235, 0.3);
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #4b5563;
+      max-width: 850px;
+      margin: 0 auto;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .demo-section {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+      margin-bottom: 40px;
+      animation: slideUp 0.6s ease-out;
+      text-align: left;
+      max-width: 850px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+    }
+
+    .demo-section h2 {
+      font-size: 26px;
+      color: #111827;
+      margin-bottom: 20px;
+      font-weight: 700;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-section p {
+      font-size: 16px;
+      color: #4b5563;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .demo-section .result {
+      font-weight: 700;
+      color: #2563eb;
+      font-size: 18px;
+      margin-top: 15px;
+      background: #e0e7ff;
+      padding: 12px 15px;
+      border-radius: 10px;
+      box-shadow: inset 0 1px 3px rgba(37, 99, 235, 0.3);
+      width: fit-content;
+      user-select: text;
+    }
+
+    /* Netlify-like Upload Section */
+    .upload-section {
+      position: relative; /* for ::before positioning */
+      background: linear-gradient(to right, #1e293b, #111827);
+      padding: 30px 40px; /* Increased padding for gap */
+      border-radius: 16px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      color: #fff;
+      transition: background 0.3s ease;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .upload-section::before {
+      content: "";
+      position: absolute;
+      top: -10px; /* pushed a bit further out */
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 22px;
+      border: 3px solid transparent;
+      background: linear-gradient(90deg, #4f46e5, #6366f1, #a5b4fc, #4f46e5);
+      background-size: 300% 100%;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      animation: moveBorder 3s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .upload-section h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    .upload-input {
+      max-width: 360px;
+      margin: 0 auto 2px;
+      padding: 10px 15px;
+      border: 3px dashed #6366f1;
+      border-radius: 14px;
+      text-align: center;
+      color: #c7d2fe;
+      font-size: 16px;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.07);
+      transition: all 0.35s ease;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.25);
+    }
+    .upload-input:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-color: #818cf8;
+      box-shadow: 0 5px 12px rgba(129, 140, 248, 0.5);
+    }
+
+    .upload-input p {
+      margin: 0;
+      user-select: none;
+    }
+    .upload-input span {
+      color: #a5b4fc;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+    .upload-input span:hover {
+      color: #c7d2fe;
+    }
+
+    .upload-input input[type="file"] {
+      display: none;
+    }
+
+    .upload-section button {
+      padding: 12px 35px;
+      font-size: 17px;
+      border: none;
+      border-radius: 10px;
+      background-color: #4f46e5;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+      display: block;
+      margin: 30px auto 0 auto;
+      user-select: none;
+      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.45);
+    }
+
+    .upload-section button:hover {
+      background-color: #4338ca;
+      box-shadow: 0 8px 20px rgba(67, 56, 202, 0.65);
+    }
+
+    .results {
+      margin-top: 30px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      user-select: text;
+    }
+
+    .results.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .results h3 {
+      font-size: 20px;
+      color: #111827;
+      margin-bottom: 18px;
+      font-weight: 700;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 6px;
+      letter-spacing: 0.4px;
+    }
+
+    .results p {
+      font-size: 16px;
+      color: #4b5563;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .footer {
+      background-color: #1f2937;
+      color: #d1d5db;
+      padding: 24px 0;
+      font-size: 15px;
+      text-align: center;
+      margin-top: 40px;
+      user-select: none;
+      letter-spacing: 0.4px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes moveBorder {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 300% 50%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 32px;
+      }
+      .header p {
+        font-size: 16px;
+        max-width: 90%;
+      }
+      .demo-section {
+        padding: 25px 20px;
+        max-width: 100%;
+      }
+      .demo-section h2, .upload-section h2 {
+        font-size: 22px;
+      }
+      .demo-section p, .results p {
+        font-size: 15px;
+      }
+      .upload-section {
+        padding: 30px 20px;
+        max-width: 90%;
+      }
+      .upload-input {
+        max-width: 100%;
+        padding: 30px 15px;
+        font-size: 16px;
+      }
+      .upload-section button {
+        padding: 14px 30px;
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to HR Model</h1>
-            <p>Our HR Model ensures fair resume screening by analyzing skills, experience, and qualifications. It eliminates bias with transparent decision-making and ethical monitoring.</p>
-        </div>
-        <div class="demo-section">
-            <h2>Demo Prediction</h2>
-            <p>Example Input: A 28-year-old male candidate with 3 years experience, 3.8 GPA, 2 skills, and 50 interview score.</p>
-            <p class="result">Result: Hired (Confidence: 82.30%)</p>
-        </div>
-        <div class="upload-section">
-            <h2>Upload Your CSV</h2>
-            <div class="upload-input">
-                <input type="file" id="csvFile" accept=".csv">
-            </div>
-            <button onclick="processCSV()">Submit</button>
-            <div class="results" id="results">
-                <h3>Prediction Results</h3>
-                <p id="resultText">Upload a CSV file to see predictions here.</p>
-            </div>
-        </div>
-    </div>
-    <div class="footer">
-        <p>© 2025 FairSight. All rights reserved.</p>
+    <input type="hidden" name="domain" value="HR">
+  <div class="container">
+    <div class="header" aria-label="Welcome message">
+      <h1>Welcome to HR Model</h1>
+      <p>Our HR Model ensures fair resume screening by analyzing skills, experience, and qualifications. It eliminates bias with transparent decision-making and ethical monitoring.</p>
     </div>
 
-    <script>
-        // Auth State Check
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                alert("You must be logged in to access this page.");
-                window.location.href = "login.html";
-            }
-        });
+    <div class="demo-section" aria-label="Demo prediction example">
+      <h2>Demo Prediction</h2>
+      <p>Example Input: A 28-year-old male candidate with 3 years experience, 3.8 GPA, 2 skills, and 50 interview score.</p>
+      <p class="result">Result: Hired (Confidence: 82.30%)</p>
+    </div>
 
-        // Logout Function
-        function logout() {
-            firebase.auth().signOut().then(() => window.location.href = "login.html");
-        }
+<!-- Upload Section -->
+<div class="upload-section">
+  <h2>Upload Your CSV</h2>
 
-        // CSV Processing Function
-        function processCSV() {
-            const fileInput = document.getElementById('csvFile');
-            const file = fileInput.files[0];
-            if (!file) {
-                alert("Please select a CSV file.");
-                return;
-            }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const lines = text.split('\n');
-                const headers = lines[0].split(',');
-                const data = lines.slice(1).filter(line => line.trim()).map(line => line.split(','));
+  <div class="upload-input" onclick="document.getElementById('csvFile').click();" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+    <p>Drag & Drop or <span style="color: blue;">Browse</span></p>
+    <input type="file" id="csvFile" accept=".csv" style="display: none;">
+  </div>
+  <p id="uploadStatus" style="color: #a5f3fc; font-weight: 600; margin-top: 10px;"></p>
 
-                let results = [];
-                const colStats = [
-                    (20, 60), (0, 10), (0, 4), (0, 100) // Placeholder min/max for age, experience, GPA, interview score
-                ];
-                const weights = [0.3, 0.25, 0.25, 0.2];
-                const bias = -0.2;
+  <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-bottom: 5px; display: block;">
+  Enter Candidate ID:
+</label>
+<input type="text" id="candidateID" placeholder="e.g. CAND1076"
+  style="
+    width: 300px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #4f46e5;
+    border-radius: 8px;
+    outline: none;
+    background-color: #0f172a;
+    color: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+  "
+  onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
+  onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
+/>
 
-                data.forEach(row => {
-                    if (row.length === headers.length) {
-                        const [pred, prob] = predictSingleInput(row, weights, bias, colStats);
-                        results.push(`Candidate ${row[1]}: ${pred === 1 ? 'Hired' : 'Not Hired'} (Confidence: ${(prob * 100).toFixed(2)}%)`);
-                    }
-                });
 
-                const resultsDiv = document.getElementById('results');
-                resultsDiv.classList.add('active');
-                if (results.length > 0) {
-                    resultsDiv.innerHTML = `<h3>Prediction Results</h3><p>${results.join('<br>')}</p>`;
-                } else {
-                    resultsDiv.innerHTML = `<h3>Prediction Results</h3><p>No valid data to predict.</p>`;
-                }
-            };
-            reader.readAsText(file);
-        }
 
-        // Mock predictSingleInput function for HR
-        function predictSingleInput(newRow, weights, bias, colStats) {
-            let features = [];
+  <button onclick="uploadCSV()" style="margin-top: 10px;">Submit</button>
 
-            const age = parseFloat(newRow[2]) || 0;
-            const [ageMin, ageMax] = colStats[0];
-            features.push((age - ageMin) / (ageMax - ageMin + 1e-8));
+  <div id="results" style="display:none; margin-top: 20px; padding: 15px; background-color: #1f2937; color: #ffffff; border-radius: 10px; width: 60%; margin-left: auto; margin-right: auto; font-family: monospace;">
+  <h3 style="text-align: center;">Prediction Result</h3>
+  <pre id="resultText" style="white-space: pre-wrap;"></pre>
+</div>
+</div>
 
-            const experience = parseFloat(newRow[5]) || 0;
-            const [expMin, expMax] = colStats[1];
-            features.push((experience - expMin) / (expMax - expMin + 1e-8));
 
-            const gpa = parseFloat(newRow[6]) || 0;
-            const [gpaMin, gpaMax] = colStats[2];
-            features.push((gpa - gpaMin) / (gpaMax - gpaMin + 1e-8));
 
-            const score = parseFloat(newRow[7]) || 0;
-            const [scoreMin, scoreMax] = colStats[3];
-            features.push((score - scoreMin) / (scoreMax - scoreMin + 1e-8));
+  </div>
 
-            let z = bias;
-            for (let i = 0; i < weights.length; i++) {
-                z += weights[i] * features[i];
-            }
-            const prob = 1 / (1 + Math.exp(-z));
-            const pred = prob >= 0.5 ? 1 : 0;
+  <div class="footer" role="contentinfo">
+    <p>© 2025 FairSight. All rights reserved.</p>
+  </div>
 
-            return [pred, prob];
-        }
-    </script>
+  <script>
+    // Your existing JavaScript remains unchanged
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        alert("You must be logged in to access this page.");
+        window.location.href = "login.html";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => window.location.href = "login.html");
+    }
+function uploadCSV() {
+  const fileInput = document.getElementById('csvFile');
+  const candidateInput = document.getElementById('candidateID');
+  const file = fileInput.files[0];
+  const candidateID = candidateInput.value.trim();
+  const uploadStatus = document.getElementById("uploadStatus");
+
+  if (!file || !candidateID) {
+    alert("Please select a CSV and enter a Candidate ID.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("csv", file);
+  formData.append("candidateID", candidateID);
+
+  uploadStatus.textContent = "⏳ Uploading...";
+
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(result => {
+    uploadStatus.textContent = "CSV uploaded successfully!";
+    const resultText = `
+      <strong>Student Name:</strong> ${result["Student Name"]}<br>
+      <strong>Prediction:</strong> ${result["Prediction"]}<br>
+      <strong>Confidence:</strong> ${result["Confidence"]}<br><br>
+      <strong>Feature Importance:</strong><br>
+      ${Object.entries(result["Explanation"])
+         .map(([k, v]) => `${k}: ${v}`)
+         .join("<br>")}
+    `;
+    document.getElementById("resultText").innerHTML = resultText;
+    document.getElementById("results").style.display = "block";
+  })
+  .catch(err => {
+    uploadStatus.textContent = "Upload failed. Please try again.";
+    document.getElementById("resultText").innerText = "Upload failed: " + err.message;
+    document.getElementById("results").style.display = "block";
+  });
+}
+
+
+
+  </script>
 </body>
 </html>

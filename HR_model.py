@@ -2,6 +2,7 @@ import csv
 import random
 from collections import Counter
 import json
+import sys
 
 # ------------------ Utility Functions ------------------
 
@@ -135,22 +136,6 @@ def feature_importance(tree, feature_counts):
         feature_importance(tree['left'], feature_counts)
         feature_importance(tree['right'], feature_counts)
 
-def find_candidate_row(data, full_data, candidate_id):
-    for i, row in enumerate(full_data):
-        if row[0].strip() == candidate_id.strip():
-            return data[i], full_data[i][1]  # row without ID/Name, plus name
-    return None, None
-
-def predict_single_candidate(candidate_id, model_trees, data, full_data):
-    row, name = find_candidate_row(data, full_data, candidate_id)
-    if row is None:
-        print("❌ Candidate ID not found.")
-        return
-    votes = [predict(tree, row) for tree in model_trees]
-    prediction = max(set(votes), key=votes.count)
-    print(f"\n🔍 Prediction for {name} ({candidate_id}): {prediction}")
-
-
 def explain_forest(trees, headers):
     feature_counts = Counter()
     for tree in trees:
@@ -165,11 +150,26 @@ def explain_forest(trees, headers):
 
     return explanation
 
+def find_candidate_row(data, full_data, candidate_id):
+    for i, row in enumerate(full_data):
+        if row[0].strip() == candidate_id.strip():
+            return data[i], full_data[i][1]  # row without ID/Name, plus name
+    return None, None
 
 # ------------------ Main ------------------
 
 if __name__ == "__main__":
-    headers, full_data = read_csv("csvfiles/csvfiles/HR_Resume.csv")
+    # 🔽 Get CSV and Candidate ID
+    input_file = sys.argv[1] if len(sys.argv) > 1 else "HR_Resume.csv"
+    candidate_id = sys.argv[2] if len(sys.argv) > 2 else None
+
+    if not candidate_id:
+        print("No candidate ID provided.")
+
+        sys.exit(1)
+
+    # 🔽 Read and Clean Data
+    headers, full_data = read_csv(input_file)
     headers = [h.strip().lstrip('\ufeff') for h in headers]
 
     # Remove ID and Name columns
@@ -178,17 +178,13 @@ if __name__ == "__main__":
     headers = [h for i, h in enumerate(headers) if i not in drop_indices]
     data = [[cell for i, cell in enumerate(row) if i not in drop_indices] for row in full_data]
 
-    # ✅ Shuffle using indices, NOT zipped data
+    # Shuffle rows together
     indices = list(range(len(data)))
     random.shuffle(indices)
     data = [data[i] for i in indices]
     full_data = [full_data[i] for i in indices]
 
-
-    # 🔍 Ask user first
-    candidate_id = input("\n🔎 Enter Candidate ID for prediction (e.g., CAND1013): ")
-
-    # 🏗 Train Random Forest
+    # 🧠 Train Forest
     split_idx = int(0.8 * len(data))
     train_data, test_data = data[:split_idx], data[split_idx:]
     actual = [row[-1] for row in test_data]
@@ -198,10 +194,11 @@ if __name__ == "__main__":
     # 📊 Feature Importance
     explanation_dict = explain_forest(trees, headers)
 
-    # 🔍 Candidate Prediction
+    # 🔍 Predict for candidate
     row, name = find_candidate_row(data, full_data, candidate_id)
     if row is None:
-        print("❌ Candidate ID not found.")
+        print("No candidate ID provided.")
+
     else:
         votes = [predict(tree, row) for tree in trees]
         prediction = max(set(votes), key=votes.count)
@@ -213,9 +210,11 @@ if __name__ == "__main__":
             "Confidence": f"{confidence:.2f}%",
             "Explanation": explanation_dict
         }
+        sys.stderr.write(f"Name: {name}, Prediction: {prediction}, Confidence: {confidence:.2f}%\n")
+        sys.stderr.write(f"Explanation: {json.dumps(explanation_dict)}\n")
 
-        print(f"\n✅ Random Forest Accuracy on HR Dataset: {acc:.2f}%")
-        print("\n📦 Final JSON Output:")
-        print(json.dumps(final_json, indent=2))
+
+        print("DEBUG: Final JSON will be dumped below...", file=sys.stderr)
+        print(json.dumps(final_json))
 
 
