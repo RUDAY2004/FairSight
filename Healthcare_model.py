@@ -2,6 +2,7 @@ import csv
 import random
 from collections import Counter
 import json
+import sys
 
 # ------------------ Utility Functions ------------------
 
@@ -100,7 +101,6 @@ def filter_features(data, headers):
     new_data = [[row[i] for i in indices_to_keep] for row in data]
     return new_headers, new_data
 
-
 def predict(tree, row):
     if isinstance(tree, dict):
         index, value = tree['index'], tree['value']
@@ -122,17 +122,13 @@ def predict(tree, row):
 def subsample(dataset, ratio=1.0):
     return [random.choice(dataset) for _ in range(int(len(dataset) * ratio))]
 
-def random_forest(train, test, max_depth, min_size, n_trees):
+def random_forest(train, test_row, max_depth=6, min_size=2, n_trees=5):
     trees = [build_tree(subsample(train), max_depth, min_size) for _ in range(n_trees)]
-    predictions = []
-    for row in test:
-        votes = [predict(tree, row) for tree in trees]
-        predictions.append(max(set(votes), key=votes.count))
-    return predictions, trees
+    votes = [predict(tree, test_row) for tree in trees]
+    prediction = max(set(votes), key=votes.count)
+    confidence = votes.count(prediction) / len(votes)
+    return prediction, confidence, trees
 
-def accuracy_metric(actual, predicted):
-    correct = sum(1 for a, p in zip(actual, predicted) if a == p)
-    return correct / len(actual) * 100
 
 # ------------------ Explainability ------------------
 
@@ -154,12 +150,10 @@ def explain_forest(trees, headers):
     for idx in range(len(headers) - 1):
         feature_name = headers[idx]
         if feature_name in used_features:
-            continue  # skip duplicate names
+            continue
         used_features.add(feature_name)
-
         perc = (feature_counts[idx] / total * 100) if total else 0
         explanation[feature_name] = f"{perc:.1f}%"
-
     return explanation
 
 # ------------------ ID/Name Lookup ------------------
@@ -170,39 +164,37 @@ def find_row_by_id_or_name(data, id_or_name):
             return row
     return None
 
-def predict_with_explanation(patient_id_or_name, data, train_data, headers):
-    row = find_row_by_id_or_name(data, patient_id_or_name)
-    if not row:
-        print("❌ Patient not found.")
-        return
-
-    trees = [build_tree(subsample(train_data), max_depth=6, min_size=2) for _ in range(5)]
-    votes = [predict(tree, row) for tree in trees]
-    prediction = max(set(votes), key=votes.count)
-    explanation = explain_forest(trees, headers)
-
-    result = {
-        "Patient Name": row[1],
-        "Prediction": prediction,
-        "Explanation": explanation
-    }
-
-    print("\n🧾 Final JSON Output:\n")
-    print(json.dumps(result, indent=2))
-
 # ------------------ Main ------------------
 
 if __name__ == "__main__":
-    headers, data = read_csv("csvfiles/csvfiles/patient_admission_dataset.csv")
-    headers, filtered_features = filter_features(data, headers); 
-    random.shuffle(data)
-    split_idx = int(0.8 * len(data))
-    train_data, test_data = data[:split_idx], data[split_idx:]
+    if len(sys.argv) != 3:
+        print(json.dumps({"error": "Usage: python Healthcare_model.py <csv_file> <Patient_ID>"}))
+        sys.exit(1)
 
-    actual = [row[-1] for row in test_data]
-    predicted, trees = random_forest(train_data, test_data, max_depth=6, min_size=2, n_trees=25)
-    acc = accuracy_metric(actual, predicted)
-    print(f"\n✅ Random Forest Accuracy: {acc:.2f}%")
+    csv_path = sys.argv[1]
+    patient_id = sys.argv[2]
 
-    user_input = input("\n🔎 Enter Patient ID or Name: ")
-    predict_with_explanation(user_input, data, train_data, headers)
+    headers, data = read_csv(csv_path)
+    raw_data = data.copy()
+    headers, filtered_data = filter_features(data, headers)
+
+    row = find_row_by_id_or_name(raw_data, patient_id)
+    if not row:
+        print(json.dumps({"error": "Patient not found."}))
+        sys.exit(1)
+
+    # Prepare data for training
+    random.shuffle(raw_data)
+    train_data = raw_data[:int(0.8 * len(raw_data))]
+
+    prediction, confidence, trees = random_forest(train_data, row, max_depth=6, min_size=2, n_trees=5)
+    explanation = explain_forest(trees, headers)
+
+    output = {
+        "Patient Name": row[1],
+        "Prediction": prediction,
+        "Confidence": f"{confidence * 100:.2f}%",
+        "Explanation": explanation
+    }
+
+    print(json.dumps(output))

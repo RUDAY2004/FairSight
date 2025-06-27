@@ -213,18 +213,33 @@
       <p class="result">Result: High Risk (Confidence: 85.60%)</p>
     </div>
 
-    <div class="upload-section" aria-label="Upload CSV section" style="height: 300px; width: 600 px ;">
-      <h2>Upload Your CSV</h2>
-      <div class="upload-input" onclick="document.getElementById('csvFile').click();">
-        <p>📄 Drag & Drop or <span>Browse</span></p>
-        <input type="file" id="csvFile" accept=".csv">
-      </div>
-      <button onclick="processCSV()">Submit</button>
-      <div class="results" id="results">
-        <h3>Prediction Results</h3>
-        <p id="resultText">Upload a CSV file to see predictions here.</p>
-      </div>
-    </div>
+    <div class="upload-section">
+  <h2>Upload Your CSV</h2>
+
+  <div class="upload-input" onclick="document.getElementById('csvFile').click();" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+    <p>Drag & Drop or <span style="color: blue;">Browse</span></p>
+    <input type="file" id="csvFile" accept=".csv" style="display: none;">
+  </div>
+  <p id="uploadStatus" style="color: #a5f3fc; font-weight: 600; margin-top: 10px;"></p>
+
+  <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-bottom: 5px; display: block;">
+    Enter Patient ID:
+  </label>
+  <input type="text" id="candidateID" placeholder="e.g. P102"
+    style="width: 300px; padding: 12px 15px; font-size: 16px; border: 2px solid #4f46e5; border-radius: 8px; outline: none; background-color: #0f172a; color: #ffffff;"
+    onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
+    onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
+  />
+
+  <input type="hidden" name="domain" value="Healthcare" />
+  <button onclick="uploadCSV()" style="margin-top: 10px;">Submit</button>
+
+  <div id="results" style="display:none; margin-top: 20px; padding: 15px; background-color: #1f2937; color: #ffffff; border-radius: 10px; width: 60%; margin-left: auto; margin-right: auto; font-family: monospace;">
+    <h3 style="text-align: center;">Prediction Result</h3>
+    <pre id="resultText" style="white-space: pre-wrap;"></pre>
+  </div>
+</div>
+
   </div>
 
   <div class="footer">
@@ -249,67 +264,49 @@
     function logout() {
       firebase.auth().signOut().then(() => window.location.href = "login.html");
     }
+function uploadCSV() {
+  const fileInput = document.getElementById('csvFile');
+  const idInput = document.getElementById('candidateID');
+  const domain = "Healthcare";
 
-    function processCSV() {
-      const fileInput = document.getElementById('csvFile');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a CSV file.");
-        return;
-      }
+  const file = fileInput.files[0];
+  const id = idInput.value.trim();
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split('\n');
-        const headers = lines[0].split(',');
-        const data = lines.slice(1).filter(line => line.trim()).map(line => line.split(','));
+  if (!file || !id) {
+    alert("Please upload a CSV and enter the Patient ID.");
+    return;
+  }
 
-        const colStats = [
-          [20, 90],       // Age
-          [90, 200],      // Glucose
-          [100, 180],     // BP
-          [0, 1],         // Smoker (1/0)
-          [0, 1]          // Chronic condition (1/0)
-        ];
-        const weights = [0.3, 0.3, 0.2, 0.1, 0.1];
-        const bias = -0.4;
+  const formData = new FormData();
+  formData.append("csv", file);
+  formData.append("id", id);
+  formData.append("domain", domain);
 
-        let results = [];
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      document.getElementById("resultText").innerText = "Error: " + data.error;
+    } else {
+      document.getElementById("resultText").innerHTML = `
+  <strong>Name:</strong> ${data['Patient Name']}<br>
+  <strong>Prediction:</strong> ${data['Prediction']}<br>
+  <strong>Confidence:</strong> ${data['Confidence']}<br><br>
+  <strong>Explanation:</strong><br>
+  ${Object.entries(data.Explanation).map(([k,v]) => `${k}: ${v}`).join('<br>')}
+`;
 
-        data.forEach((row, idx) => {
-          if (row.length >= 6) {
-            const age = parseFloat(row[1]) || 0;
-            const glucose = parseFloat(row[2]) || 0;
-            const bp = parseFloat(row[3]) || 0;
-            const smoker = row[4].toLowerCase() === "yes" ? 1 : 0;
-            const chronic = row[5].toLowerCase() === "yes" ? 1 : 0;
-
-            const features = [
-              (age - colStats[0][0]) / (colStats[0][1] - colStats[0][0]),
-              (glucose - colStats[1][0]) / (colStats[1][1] - colStats[1][0]),
-              (bp - colStats[2][0]) / (colStats[2][1] - colStats[2][0]),
-              smoker,
-              chronic
-            ];
-
-            let z = bias;
-            for (let i = 0; i < weights.length; i++) {
-              z += weights[i] * features[i];
-            }
-            const prob = 1 / (1 + Math.exp(-z));
-            const pred = prob >= 0.5 ? "High Risk" : "Low Risk";
-
-            results.push(`Patient ${idx + 1}: ${pred} (Confidence: ${(prob * 100).toFixed(2)}%)`);
-          }
-        });
-
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.classList.add('active');
-        document.getElementById('resultText').innerHTML = results.join('<br>');
-      };
-      reader.readAsText(file);
     }
+    document.getElementById("results").style.display = "block";
+  })
+  .catch(err => {
+    document.getElementById("resultText").innerText = "Upload failed: " + err.message;
+    document.getElementById("results").style.display = "block";
+  });
+}
   </script>
 </body>
 </html>

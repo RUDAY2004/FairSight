@@ -324,11 +324,9 @@
       <p>Example Input: A 28-year-old male candidate with 3 years experience, 3.8 GPA, 2 skills, and 50 interview score.</p>
       <p class="result">Result: Hired (Confidence: 82.30%)</p>
     </div>
-
 <!-- Upload Section -->
 <div class="upload-section">
   <h2>Upload Your CSV</h2>
-
 
   <div class="upload-input" onclick="document.getElementById('csvFile').click();" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
     <p>Drag & Drop or <span style="color: blue;">Browse</span></p>
@@ -337,34 +335,36 @@
   <p id="uploadStatus" style="color: #a5f3fc; font-weight: 600; margin-top: 10px;"></p>
 
   <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-bottom: 5px; display: block;">
-  Enter Candidate ID:
-</label>
-<input type="text" id="candidateID" placeholder="e.g. CAND1076"
-  style="
-    width: 300px;
-    padding: 12px 15px;
-    font-size: 16px;
-    border: 2px solid #4f46e5;
-    border-radius: 8px;
-    outline: none;
-    background-color: #0f172a;
-    color: #ffffff;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 0 rgba(0,0,0,0);
-  "
-  onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
-  onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
-/>
+    Enter ID:
+  </label>
+  <input type="text" id="candidateID" placeholder="e.g. CAND1076"
+    style="
+      width: 300px;
+      padding: 12px 15px;
+      font-size: 16px;
+      border: 2px solid #4f46e5;
+      border-radius: 8px;
+      outline: none;
+      background-color: #0f172a;
+      color: #ffffff;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    "
+    onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
+    onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
+  />
 
-
+  <!-- Domain Identification -->
+  <input type="hidden" name="domain" value="HR" />
 
   <button onclick="uploadCSV()" style="margin-top: 10px;">Submit</button>
 
   <div id="results" style="display:none; margin-top: 20px; padding: 15px; background-color: #1f2937; color: #ffffff; border-radius: 10px; width: 60%; margin-left: auto; margin-right: auto; font-family: monospace;">
-  <h3 style="text-align: center;">Prediction Result</h3>
-  <pre id="resultText" style="white-space: pre-wrap;"></pre>
+    <h3 style="text-align: center;">Prediction Result</h3>
+    <pre id="resultText" style="white-space: pre-wrap;"></pre>
+  </div>
 </div>
-</div>
+
 
 
 
@@ -386,51 +386,48 @@
     function logout() {
       firebase.auth().signOut().then(() => window.location.href = "login.html");
     }
-function uploadCSV() {
+    function uploadCSV() {
   const fileInput = document.getElementById('csvFile');
-  const candidateInput = document.getElementById('candidateID');
-  const file = fileInput.files[0];
-  const candidateID = candidateInput.value.trim();
-  const uploadStatus = document.getElementById("uploadStatus");
+  const idInput = document.getElementById('candidateID');
+  const domain = "HR";
 
-  if (!file || !candidateID) {
-    alert("Please select a CSV and enter a Candidate ID.");
+  const file = fileInput.files[0];
+  const id = idInput.value.trim();
+
+  if (!file || !id) {
+    alert("Please upload a CSV and enter the Candidate ID.");
     return;
   }
 
   const formData = new FormData();
   formData.append("csv", file);
-  formData.append("candidateID", candidateID);
-
-  uploadStatus.textContent = "⏳ Uploading...";
+  formData.append("id", id);
+  formData.append("domain", domain);
 
   fetch("/upload", {
     method: "POST",
     body: formData,
   })
-  .then(response => response.json())
-  .then(result => {
-    uploadStatus.textContent = "CSV uploaded successfully!";
-    const resultText = `
-      <strong>Student Name:</strong> ${result["Student Name"]}<br>
-      <strong>Prediction:</strong> ${result["Prediction"]}<br>
-      <strong>Confidence:</strong> ${result["Confidence"]}<br><br>
-      <strong>Feature Importance:</strong><br>
-      ${Object.entries(result["Explanation"])
-         .map(([k, v]) => `${k}: ${v}`)
-         .join("<br>")}
-    `;
-    document.getElementById("resultText").innerHTML = resultText;
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      document.getElementById("resultText").innerText = "Error: " + data.error;
+    } else {
+      document.getElementById("resultText").innerHTML = `
+        <strong>Name:</strong> ${data['Student Name']}<br>
+        <strong>Prediction:</strong> ${data['Prediction']}<br>
+        <strong>Confidence:</strong> ${data['Confidence']}<br><br>
+        <strong>Explanation:</strong><br>
+        ${Object.entries(data.Explanation).map(([k,v]) => `${k}: ${v}`).join('<br>')}
+      `;
+    }
     document.getElementById("results").style.display = "block";
   })
   .catch(err => {
-    uploadStatus.textContent = "Upload failed. Please try again.";
     document.getElementById("resultText").innerText = "Upload failed: " + err.message;
     document.getElementById("results").style.display = "block";
   });
 }
-
-
 
   </script>
 </body>

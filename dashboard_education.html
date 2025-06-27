@@ -193,18 +193,33 @@
       <p>Example Input: A 19-year-old female student from India with GPA 3.70, 91.5% score, $9,500 income, 3 activities, 120 volunteering hours, 1350 score, with siblings and a preferred major of Management.</p>
       <p class="result">Result: Scholarship: Yes (Confidence: 85.50%)</p>
     </div>
-    <div class="upload-section" aria-label="Upload CSV section" style="height: 300px; width: 600 px ;">
-      <h2>Upload Your CSV</h2>
-      <div class="upload-input" onclick="document.getElementById('csvFile').click();">
-        <p>📄 Drag & Drop or <span>Browse</span></p>
-        <input type="file" id="csvFile" accept=".csv">
-      </div>
-      <button onclick="processCSV()">Submit</button>
-      <div class="results" id="results">
-        <h3>Prediction Results</h3>
-        <p id="resultText">Upload a CSV file to see predictions here.</p>
-      </div>
-    </div>
+    <div class="upload-section">
+  <h2>Upload Your CSV</h2>
+
+  <div class="upload-input" onclick="document.getElementById('csvFile').click();" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+    <p>Drag & Drop or <span style="color: blue;">Browse</span></p>
+    <input type="file" id="csvFile" accept=".csv" style="display: none;">
+  </div>
+  <p id="uploadStatus" style="color: #a5f3fc; font-weight: 600; margin-top: 10px;"></p>
+
+  <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-bottom: 5px; display: block;">
+    Enter Student ID:
+  </label>
+  <input type="text" id="candidateID" placeholder="e.g. STU1022"
+    style="width: 300px; padding: 12px 15px; font-size: 16px; border: 2px solid #4f46e5; border-radius: 8px; outline: none; background-color: #0f172a; color: #ffffff;"
+    onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
+    onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
+  />
+
+  <input type="hidden" name="domain" value="Education" />
+  <button onclick="uploadCSV()" style="margin-top: 10px;">Submit</button>
+
+  <div id="results" style="display:none; margin-top: 20px; padding: 15px; background-color: #1f2937; color: #ffffff; border-radius: 10px; width: 60%; margin-left: auto; margin-right: auto; font-family: monospace;">
+    <h3 style="text-align: center;">Prediction Result</h3>
+    <pre id="resultText" style="white-space: pre-wrap;"></pre>
+  </div>
+</div>
+
   </div>
   <div class="footer">
     <p>© 2025 FairSight. All rights reserved.</p>
@@ -219,60 +234,48 @@
     function logout() {
       firebase.auth().signOut().then(() => window.location.href = "login.html");
     }
-    function processCSV() {
-      const fileInput = document.getElementById('csvFile');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a CSV file.");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split('\n');
-        const headers = lines[0].split(',');
-        const data = lines.slice(1).filter(line => line.trim()).map(line => line.split(','));
-        let results = [];
-        const colStats = [[0, 4], [0, 100], [0, 10000], [0, 5], [0, 200], [0, 1500], [0, 1], [0, 10]];
-        const majorMap = { "Management": 0, "Engineering": 1, "Science": 2 };
-        const weights = [0.5, 0.3, 0.2, 0.1, 0.15, 0.25, 0.1, 0.05];
-        const bias = -0.5;
-        data.forEach(row => {
-          if (row.length === headers.length) {
-            const [pred, prob] = predictSingleInput(row, weights, bias, colStats, majorMap);
-            results.push(`Student ${row[1]}: Scholarship ${pred === 1 ? 'Yes' : 'No'} (Confidence: ${(prob * 100).toFixed(2)}%)`);
-          }
-        });
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.classList.add('active');
-        document.getElementById('resultText').innerHTML = results.length ? results.join('<br>') : 'No valid data to predict.';
-      };
-      reader.readAsText(file);
+  function uploadCSV() {
+  const fileInput = document.getElementById('csvFile');
+  const idInput = document.getElementById('candidateID');
+  const domain = "Education";
+
+  const file = fileInput.files[0];
+  const id = idInput.value.trim();
+
+  if (!file || !id) {
+    alert("Please upload a CSV and enter the Student ID.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("csv", file);
+  formData.append("id", id);
+  formData.append("domain", domain);
+
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      document.getElementById("resultText").innerText = "Error: " + data.error;
+    } else {
+      document.getElementById("resultText").innerHTML = `
+        <strong>Name:</strong> ${data['Name']}<br>
+        <strong>Prediction:</strong> ${data['Prediction']}<br>
+        <strong>Confidence:</strong> ${data['Confidence']}<br><br>
+        <strong>Explanation:</strong><br>
+        ${Object.entries(data.Explanation).map(([k,v]) => `${k}: ${v}`).join('<br>')}
+      `;
     }
-    function predictSingleInput(newRow, weights, bias, colStats, majorMap) {
-      let features = [];
-      const gender = newRow[3].toLowerCase() === 'male' ? 1 : 0;
-      features.push(gender);
-      for (let i = 5; i <= 10; i++) {
-        const val = parseFloat(newRow[i]) || 0;
-        const [minVal, maxVal] = colStats[i - 5];
-        const normVal = (val - minVal) / (maxVal - minVal + 1e-8);
-        features.push(normVal);
-      }
-      const siblings = newRow[11].toLowerCase() === 'yes' ? 1 : 0;
-      features.push(siblings);
-      const major = majorMap[newRow[12]] || 0;
-      const [majorMin, majorMax] = colStats[7];
-      const majorNorm = (major - majorMin) / (majorMax - majorMin + 1e-8);
-      features.push(majorNorm);
-      let z = bias;
-      for (let i = 0; i < weights.length; i++) {
-        z += weights[i] * features[i];
-      }
-      const prob = 1 / (1 + Math.exp(-z));
-      const pred = prob >= 0.5 ? 1 : 0;
-      return [pred, prob];
-    }
+    document.getElementById("results").style.display = "block";
+  })
+  .catch(err => {
+    document.getElementById("resultText").innerText = "Upload failed: " + err.message;
+    document.getElementById("results").style.display = "block";
+  });
+}
   </script>
 </body>
 </html>

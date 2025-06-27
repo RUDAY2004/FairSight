@@ -11,6 +11,15 @@ PORT = 8000
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+# Domain to model script mapping
+DOMAIN_SCRIPTS = {
+    "HR": "HR_model.py",
+    "Education": "Education_model.py",
+    "Banking": "Loan_model.py",
+    "Retail": "Retail_model.py",
+    "Healthcare": "Healthcare_model.py"
+}
+
 class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path == '/upload':
@@ -27,35 +36,44 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             msg = BytesParser(policy=default).parsebytes(
                 b'Content-Type: ' + content_type.encode() + b'\r\n\r\n' + body)
 
-            # Extract CSV file and candidate ID
             file_data = None
-            candidate_id = None
+            input_id = None
+            domain = None
 
             for part in msg.iter_parts():
                 if part.get_content_disposition() == 'form-data':
                     name = part.get_param('name', header='content-disposition')
                     if name == 'csv':
                         file_data = part.get_payload(decode=True)
-                    elif name == 'candidateID':
-                        candidate_id = part.get_content().strip()
+                    elif name == 'id':
+                        input_id = part.get_content().strip()
+                    elif name == 'domain':
+                        domain = part.get_content().strip()
 
-            if not file_data or not candidate_id:
+            if not file_data or not input_id or not domain:
                 self.send_response(400)
                 self.end_headers()
-                self.wfile.write(b"Missing file or candidate ID.")
+                self.wfile.write(b"Missing file, ID, or domain.")
                 return
 
-            filename = "uploaded.csv"
+            if domain not in DOMAIN_SCRIPTS:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b"Invalid domain provided.")
+                return
+
+            filename = f"uploaded_{domain}.csv"
             filepath = os.path.join(UPLOAD_DIR, filename)
             with open(filepath, 'wb') as f:
                 f.write(file_data)
 
             print(f"Uploaded to: {filepath}")
-            print(f"Candidate ID: {candidate_id}")
+            print(f"Domain: {domain}, ID: {input_id}")
 
             try:
+                script = DOMAIN_SCRIPTS[domain]
                 result = subprocess.run(
-                    ['python', 'HR_model.py', filepath, candidate_id],
+                    ['python', script, filepath, input_id],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True
@@ -68,7 +86,6 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
 
-                # 🛠 Extract only the final JSON line
                 lines = result.stdout.strip().split('\n')
                 for line in reversed(lines):
                     try:
@@ -78,14 +95,13 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     except json.JSONDecodeError:
                         continue
 
-                # If no valid JSON found
                 self.wfile.write(b"Failed to parse output.")
 
             except Exception as e:
                 print("Exception occurred:", e)
                 self.send_response(500)
                 self.end_headers()
-                self.wfile.write(b"Something went wrong during file upload or processing.")
+                self.wfile.write(b"Internal server error.")
             return
 
         self.send_response(404)
