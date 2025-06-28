@@ -7,61 +7,47 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f9fafb;
-      color: #1f2937;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
       line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
       max-width: 1100px;
-      margin: 0 auto;
-      padding: 60px 25px;
-      text-align: center;
+      margin: auto;
+      padding: 50px 20px;
     }
 
     .header {
-      background: linear-gradient(180deg, #e6f0fa, #f0f4f8);
-      padding: 50px 30px;
-      border-radius: 16px;
+      background: linear-gradient(to right, #dbeafe, #e0f2fe);
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.08);
       margin-bottom: 40px;
-      animation: fadeIn 0.8s ease-in;
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
-      user-select: none;
     }
 
     .header h1 {
-      font-size: 42px;
-      color: #2563eb;
-      margin: 0 0 15px 0;
+      font-size: 40px;
+      color: #1e40af;
       font-weight: 800;
-      letter-spacing: 1.2px;
-      text-shadow: 0 1px 2px rgba(37, 99, 235, 0.3);
+      margin-bottom: 12px;
     }
 
     .header p {
       font-size: 18px;
-      color: #4b5563;
-      max-width: 850px;
+      color: #475569;
+      max-width: 700px;
       margin: 0 auto;
-      font-weight: 500;
-      line-height: 1.5;
     }
 
     .demo-section {
       background-color: #fff;
-      padding: 30px 40px;
+      padding: 30px;
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
       margin-bottom: 40px;
-      animation: slideUp 0.6s ease-out;
-      text-align: left;
-      max-width: 850px;
-      margin-left: auto;
-      margin-right: auto;
-      user-select: none;
     }
 
     .demo-section h2 {
@@ -71,7 +57,6 @@
       font-weight: 700;
       border-bottom: 2px solid #2563eb;
       padding-bottom: 8px;
-      letter-spacing: 0.5px;
     }
 
     .demo-section p {
@@ -89,92 +74,36 @@
       background: #e0e7ff;
       padding: 12px 15px;
       border-radius: 10px;
-      box-shadow: inset 0 1px 3px rgba(37, 99, 235, 0.3);
-      width: fit-content;
-      user-select: text;
     }
 
-    /* Netlify-like Upload Section */
     .upload-section {
-      position: relative; /* for ::before positioning */
-      background: linear-gradient(to right, #1e293b, #111827);
-      padding: 30px 40px; /* Increased padding for gap */
-      border-radius: 16px;
-      box-shadow: 0 10px 22px rgba(0,0,0,0.2);
-      margin-bottom: 30px;
-      color: #fff;
-      transition: background 0.3s ease;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      user-select: none;
-      z-index: 0;
-    }
-
-    .upload-section::before {
-      content: "";
-      position: absolute;
-      top: -10px; /* pushed a bit further out */
-      left: -10px;
-      right: -10px;
-      bottom: -10px;
-      border-radius: 22px;
-      border: 3px solid transparent;
-      background: linear-gradient(90deg, #4f46e5, #6366f1, #a5b4fc, #4f46e5);
-      background-size: 300% 100%;
-      -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
-      animation: moveBorder 3s linear infinite;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .upload-section h2 {
-      font-size: 28px;
-      margin-bottom: 25px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      background: linear-gradient(to right, #1e3a8a, #1e293b);
+      padding: 35px 30px;
+      border-radius: 20px;
+      color: #f8fafc;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.25);
       text-align: center;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      margin-bottom: 40px;
     }
 
     .upload-input {
       max-width: 360px;
-      margin: 0 auto 2px;
-      padding: 10px 15px;
-      border: 3px dashed #6366f1;
+      margin: 0 auto;
+      padding: 14px;
+      border: 2px dashed #a5b4fc;
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 14px;
-      text-align: center;
-      color: #c7d2fe;
-      font-size: 16px;
-      font-weight: 600;
-      background-color: rgba(255, 255, 255, 0.07);
-      transition: all 0.35s ease;
       cursor: pointer;
-      user-select: none;
-      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.25);
-    }
-    .upload-input:hover {
-      background-color: rgba(255, 255, 255, 0.12);
-      border-color: #818cf8;
-      box-shadow: 0 5px 12px rgba(129, 140, 248, 0.5);
     }
 
-    .upload-input p {
-      margin: 0;
-      user-select: none;
+    .upload-input:hover {
+      background: rgba(255,255,255,0.12);
     }
+
     .upload-input span {
-      color: #a5b4fc;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: color 0.25s ease;
-    }
-    .upload-input span:hover {
       color: #c7d2fe;
+      text-decoration: underline;
+      font-weight: bold;
     }
 
     .upload-input input[type="file"] {
@@ -182,126 +111,141 @@
     }
 
     .upload-section button {
-      padding: 12px 35px;
-      font-size: 17px;
-      border: none;
-      border-radius: 10px;
-      background-color: #4f46e5;
-      color: #fff;
-      cursor: pointer;
+      margin-top: 25px;
+      padding: 12px 30px;
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 0.8px;
-      transition: background 0.35s ease, box-shadow 0.35s ease;
-      display: block;
-      margin: 30px auto 0 auto;
-      user-select: none;
-      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.45);
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(to right, #4f46e5, #6366f1);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      box-shadow: 0 6px 15px rgba(79,70,229,0.4);
     }
 
     .upload-section button:hover {
-      background-color: #4338ca;
-      box-shadow: 0 8px 20px rgba(67, 56, 202, 0.65);
+      transform: scale(1.04);
+    }
+
+    input[type="text"] {
+      width: 280px;
+      padding: 12px 16px;
+      margin-top: 15px;
+      border: 2px solid #60a5fa;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 16px;
     }
 
     .results {
-      margin-top: 30px;
-      text-align: left;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #fff;
-      padding: 25px 30px;
-      border-radius: 14px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      user-select: text;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      margin-top: 40px;
+      display: none;
     }
 
     .results.active {
-      opacity: 1;
-      transform: translateY(0);
+      display: block;
     }
 
-    .results h3 {
-      font-size: 20px;
-      color: #111827;
-      margin-bottom: 18px;
-      font-weight: 700;
-      border-bottom: 2px solid #2563eb;
-      padding-bottom: 6px;
-      letter-spacing: 0.4px;
-    }
-
-    .results p {
+    .result-grid {
+      background: #0f172a;
+      border-radius: 16px;
+      color: #f8fafc;
+      padding: 20px;
+      margin-bottom: 25px;
       font-size: 16px;
-      color: #4b5563;
-      white-space: pre-wrap;
-      line-height: 1.5;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #334155;
+      padding: 8px 0;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-row span:first-child {
+      font-weight: 600;
+      color: #93c5fd;
+    }
+
+    #predictionCell {
+      padding: 4px 10px;
+      background-color: #fee2e2;
+      color: #b91c1c;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    #confidenceCell {
+      color: #10b981;
+      font-weight: bold;
+    }
+
+    .feature-table-wrapper h4 {
+      margin-bottom: 12px;
+      color: #334155;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .feature-split-table {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .feature-split-table table {
+      flex: 1 1 45%;
+      min-width: 280px;
+    }
+
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1e3a8a;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 15px;
+      color: #f8fafc;
+    }
+
+    .feature-table th {
+      background-color: #2563eb;
+      color: #fff;
+      padding: 12px;
+      text-align: left;
+      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .feature-table td {
+      padding: 12px;
+      border-bottom: 1px solid #3b82f6;
+    }
+
+    .feature-table tr:hover td {
+      background-color: #1e40af;
     }
 
     .footer {
       background-color: #1f2937;
       color: #d1d5db;
-      padding: 24px 0;
-      font-size: 15px;
+      padding: 20px;
       text-align: center;
-      margin-top: 40px;
-      user-select: none;
-      letter-spacing: 0.4px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes moveBorder {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 300% 50%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .header h1 {
-        font-size: 32px;
-      }
-      .header p {
-        font-size: 16px;
-        max-width: 90%;
-      }
-      .demo-section {
-        padding: 25px 20px;
-        max-width: 100%;
-      }
-      .demo-section h2, .upload-section h2 {
-        font-size: 22px;
-      }
-      .demo-section p, .results p {
-        font-size: 15px;
-      }
-      .upload-section {
-        padding: 30px 20px;
-        max-width: 90%;
-      }
-      .upload-input {
-        max-width: 100%;
-        padding: 30px 15px;
-        font-size: 16px;
-      }
-      .upload-section button {
-        padding: 14px 30px;
-        font-size: 16px;
-      }
+      font-size: 14px;
     }
   </style>
 
@@ -312,70 +256,53 @@
   <script src="firebase.js"></script>
 </head>
 <body>
-    <input type="hidden" name="domain" value="HR">
+  <input type="hidden" name="domain" value="HR">
+
   <div class="container">
-    <div class="header" aria-label="Welcome message">
+    <div class="header">
       <h1>Welcome to HR Model</h1>
-      <p>Our HR Model ensures fair resume screening by analyzing skills, experience, and qualifications. It eliminates bias with transparent decision-making and ethical monitoring.</p>
+      <p>Our HR Model ensures fair resume screening by analyzing skills, experience, and qualifications.</p>
     </div>
 
-    <div class="demo-section" aria-label="Demo prediction example">
+    <div class="demo-section">
       <h2>Demo Prediction</h2>
       <p>Example Input: A 28-year-old male candidate with 3 years experience, 3.8 GPA, 2 skills, and 50 interview score.</p>
       <p class="result">Result: Hired (Confidence: 82.30%)</p>
     </div>
-<!-- Upload Section -->
-<div class="upload-section">
-  <h2>Upload Your CSV</h2>
 
-  <div class="upload-input" onclick="document.getElementById('csvFile').click();" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
-    <p>Drag & Drop or <span style="color: blue;">Browse</span></p>
-    <input type="file" id="csvFile" accept=".csv" style="display: none;">
-  </div>
-  <p id="uploadStatus" style="color: #a5f3fc; font-weight: 600; margin-top: 10px;"></p>
+    <div class="upload-section">
+      <h2>Upload Your CSV</h2>
+      <div class="upload-input" onclick="document.getElementById('csvFile').click();">
+        <p>📄 Drag & Drop or <span>Browse</span></p>
+        <input type="file" id="csvFile" accept=".csv">
+      </div>
 
-  <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-bottom: 5px; display: block;">
-    Enter ID:
-  </label>
-  <input type="text" id="candidateID" placeholder="e.g. CAND1076"
-    style="
-      width: 300px;
-      padding: 12px 15px;
-      font-size: 16px;
-      border: 2px solid #4f46e5;
-      border-radius: 8px;
-      outline: none;
-      background-color: #0f172a;
-      color: #ffffff;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 0 rgba(0,0,0,0);
-    "
-    onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 5px #6366f1';"
-    onblur="this.style.borderColor='#4f46e5'; this.style.boxShadow='none';"
-  />
+      <p id="uploadStatus"></p>
 
-  <!-- Domain Identification -->
-  <input type="hidden" name="domain" value="HR" />
+      <label for="candidateID" style="color: #ffffff; font-weight: 500; margin-top: 10px;">Enter Candidate ID:</label>
+      <input type="text" id="candidateID" placeholder="e.g. CAND1076">
 
-  <button onclick="uploadCSV()" style="margin-top: 10px;">Submit</button>
+      <button onclick="uploadCSV()">Submit</button>
 
-  <div id="results" style="display:none; margin-top: 20px; padding: 15px; background-color: #1f2937; color: #ffffff; border-radius: 10px; width: 60%; margin-left: auto; margin-right: auto; font-family: monospace;">
-    <h3 style="text-align: center;">Prediction Result</h3>
-    <pre id="resultText" style="white-space: pre-wrap;"></pre>
-  </div>
-</div>
-
-
-
-
+      <div id="results" class="results">
+        <h3 style="text-align: center;color:#1e293b">Prediction Result</h3>
+        <div class="result-grid">
+          <div class="result-row"><span>👤 Student Name:</span><span id="nameCell">-</span></div>
+          <div class="result-row"><span>📊 Prediction:</span><span id="predictionCell">-</span></div>
+          <div class="result-row"><span>📈 Confidence:</span><span id="confidenceCell">-</span></div>
+        </div>
+        <div class="feature-table-wrapper">
+          <h4>🔍 Feature Importance</h4>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="footer" role="contentinfo">
+  <div class="footer">
     <p>© 2025 FairSight. All rights reserved.</p>
   </div>
 
   <script>
-    // Your existing JavaScript remains unchanged
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         alert("You must be logged in to access this page.");
@@ -386,49 +313,77 @@
     function logout() {
       firebase.auth().signOut().then(() => window.location.href = "login.html");
     }
+
     function uploadCSV() {
-  const fileInput = document.getElementById('csvFile');
-  const idInput = document.getElementById('candidateID');
-  const domain = "HR";
+      const fileInput = document.getElementById('csvFile');
+      const candidateInput = document.getElementById('candidateID');
+      const file = fileInput.files[0];
+      const id = candidateInput.value.trim();
+      const uploadStatus = document.getElementById("uploadStatus");
 
-  const file = fileInput.files[0];
-  const id = idInput.value.trim();
+      if (!file || !id) {
+        alert("Please upload a CSV and enter the Candidate ID.");
+        return;
+      }
 
-  if (!file || !id) {
-    alert("Please upload a CSV and enter the Candidate ID.");
-    return;
-  }
+      const formData = new FormData();
+      formData.append("csv", file);
+      formData.append("id", id);
+      formData.append("domain", "HR");
 
-  const formData = new FormData();
-  formData.append("csv", file);
-  formData.append("id", id);
-  formData.append("domain", domain);
+      uploadStatus.textContent = "⏳ Uploading...";
 
-  fetch("/upload", {
-    method: "POST",
-    body: formData,
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.error) {
-      document.getElementById("resultText").innerText = "Error: " + data.error;
-    } else {
-      document.getElementById("resultText").innerHTML = `
-        <strong>Name:</strong> ${data['Student Name']}<br>
-        <strong>Prediction:</strong> ${data['Prediction']}<br>
-        <strong>Confidence:</strong> ${data['Confidence']}<br><br>
-        <strong>Explanation:</strong><br>
-        ${Object.entries(data.Explanation).map(([k,v]) => `${k}: ${v}`).join('<br>')}
-      `;
+      fetch("/upload", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          uploadStatus.textContent = "Error: " + data.error;
+        } else {
+          uploadStatus.textContent = "✅ CSV uploaded successfully!";
+          document.getElementById("nameCell").textContent = data["Student Name"];
+          document.getElementById("predictionCell").textContent = data["Prediction"];
+          document.getElementById("confidenceCell").textContent = data["Confidence"];
+
+          const wrapper = document.querySelector(".feature-table-wrapper");
+          wrapper.innerHTML = `<h4>🔍 Feature Importance</h4>`;
+
+          const entries = Object.entries(data["Explanation"]);
+          const half = Math.ceil(entries.length / 2);
+          const left = entries.slice(0, half);
+          const right = entries.slice(half);
+
+          function createTable(part) {
+            const table = document.createElement("table");
+            table.className = "feature-table";
+            const thead = document.createElement("thead");
+            thead.innerHTML = `<tr><th>Feature</th><th>Importance</th></tr>`;
+            table.appendChild(thead);
+            const tbody = document.createElement("tbody");
+            part.forEach(([feature, value]) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `<td>${feature}</td><td>${value}</td>`;
+              tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            return table;
+          }
+
+          const flexContainer = document.createElement("div");
+          flexContainer.className = "feature-split-table";
+          flexContainer.appendChild(createTable(left));
+          flexContainer.appendChild(createTable(right));
+          wrapper.appendChild(flexContainer);
+
+          document.getElementById("results").classList.add("active");
+        }
+      })
+      .catch(err => {
+        uploadStatus.textContent = "Upload failed: " + err.message;
+      });
     }
-    document.getElementById("results").style.display = "block";
-  })
-  .catch(err => {
-    document.getElementById("resultText").innerText = "Upload failed: " + err.message;
-    document.getElementById("results").style.display = "block";
-  });
-}
-
   </script>
 </body>
 </html>
